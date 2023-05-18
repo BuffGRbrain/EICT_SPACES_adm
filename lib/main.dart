@@ -143,9 +143,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                        Text(
-                                          'Lunes 22 de mayo 3:00 p.m. - 5:00 p.m.',
-                                          style: TextStyle(fontSize: 16),
+                                        Expanded(
+                                          child: Text(
+                                            'Lunes 22 de mayo 3:00 p.m. - 5:00 p.m.',
+                                            style: TextStyle(fontSize: 16),
+                                            overflow: TextOverflow.clip,
+                                          ),
                                         ),
                                       ],
                                     ),
