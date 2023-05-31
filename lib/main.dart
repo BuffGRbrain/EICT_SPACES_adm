@@ -1,4 +1,6 @@
+import 'package:eict_spaces_adm/controllers/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,6 +43,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final mainController controller = Get.put(mainController());
   var numSolicitudes = 10;
   @override
   Widget build(BuildContext context) {
@@ -158,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: [
                                         ElevatedButton(
                                           onPressed: () {
-                                            // Lógica
+                                            controller.sendMail();
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.green,
