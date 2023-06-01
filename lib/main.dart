@@ -243,7 +243,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                             children: [
                                               ElevatedButton(
                                                 onPressed: () {
-                                                  // Lógica
+                                                  updateEvent(reservas[index][7], "APPROVED");
+                                                  deleteCollision(reservas[index][3],reservas[index][4],reservas,reservas[index][7]);
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: Colors.green,
@@ -265,6 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               ElevatedButton(
                                                 onPressed: () {
                                                   controller.sendMail();
+                                                  updateEvent(reservas[index][7], "DENIED");
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: Colors.red,
@@ -326,34 +328,27 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 
-class Meeting {
-  /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
-      this.status, this.reason, this.by, this.spaceId,
-      [this.bookingId = ""]);
-
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
-
-  String status;
-
-  String reason;
-
-  Map by;
-
-  String spaceId;
-
-  String bookingId;
+//approved es un booleano para ver si se aprobo o nego
+Future<void> updateEvent(id, data) {
+  CollectionReference users = FirebaseFirestore.instance.collection('bookings');
+    //Espacio para negar las que tienen conflicto
+    return users
+        .doc(id)
+        .update({'Status':data}) //{key1: val1}
+        .then((value) => print("Event Updated"))
+        .catchError((error) => print("Failed to update event: $error"));
 }
+
+//reservas son las pending y uso el id para actualizarlas
+Future<void> deleteCollision(from,to,reservas,id) async {//from, to son date e id es el de la actual para no borrarla accidentalmente
+  for(var i in reservas){
+    if(i[7] != id ){ //si no es la que acabo de aceptar buscar colisiones y matarlas
+      var aux = to.isBefore( i[3]  ); //es un booleano
+      var aux2 = from.isAfter(i[3]);
+      if(aux && aux2){ //si esta en el rango de reserva la matamos
+        updateEvent(i[7], "DENIED");
+      }
+    }
+  }
+}
+
