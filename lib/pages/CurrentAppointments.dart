@@ -83,7 +83,7 @@ class _AppointmentCalendarState extends State<AppointmentCalendar> {
 
     List<Meeting> list = filteredAppointments
         .map((e) => Meeting(
-      "${spaces.docs.where((element) => element.id == e.data()["space_id"]).first["name"].toString()} - ${e.data()['name']}",
+      e.data()["name"],
       e.data()['from'].toDate(),
       e.data()['to'].toDate(),
       spaces_colors[spaces.docs
@@ -94,7 +94,7 @@ class _AppointmentCalendarState extends State<AppointmentCalendar> {
       e.data()["status"],
       e.data()['reason'],
       e.data()['by'],
-      e.data()['space_id'],
+      spaces.docs.where((element) => element.id == e.data()["space_id"]).first["name"].toString(),
       e.id,
     ))
         .toList();
@@ -146,15 +146,20 @@ class _AppointmentCalendarState extends State<AppointmentCalendar> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text(appointmentDetails.eventName),
+                        title: Text(appointmentDetails.spaceId),
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            Text("${appointmentDetails.eventName} - ${appointmentDetails.by["name"]}", style: const TextStyle(fontSize: 20)),
+                            SizedBox.fromSize(size: const Size(0, 10),),
                             Text(
                                 'Desde: ${appointmentDetails.from.toString()}'),
+                            SizedBox.fromSize(size: const Size(0, 10),),
                             Text('Hasta: ${appointmentDetails.to.toString()}'),
-                            Text('Descripción: ${appointmentDetails.reason}'),
+                            SizedBox.fromSize(size: const Size(0, 10),),
+                            Text('Descripción: ${appointmentDetails.reason}', textAlign: TextAlign.justify,),
+                            SizedBox.fromSize(size: const Size(0, 10),),
                           ],
                         ),
                         actions: <Widget>[

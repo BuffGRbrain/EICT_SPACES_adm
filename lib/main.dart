@@ -1,4 +1,5 @@
 import 'package:eict_spaces_adm/controllers/controller.dart';
+import 'package:eict_spaces_adm/pages/CurrentAppointments.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -311,7 +312,12 @@ class _MyHomePageState extends State<MyHomePage> {
 // This trailing comma makes auto-formatting nicer for build methods.
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => print("calendario"),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CurrentApointments()),
+          );
+        },
         tooltip: 'Increment', //buscar un icono como un calendario
         child: const Icon(Icons.calendar_month),
       ),
