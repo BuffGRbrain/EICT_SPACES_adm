@@ -60,7 +60,7 @@ Future<List> getPendingBookings() async {
   print(bookings.docs.length);
   print(bookings.docs.length.runtimeType);
   List Solicitudes = await bookings.docs
-      .map((e) => [e.data()['space_id'],e.data()['by']['email'], e.data()['by']['name'], e.data()['from'].toDate(),e.data()['to'].toDate()])
+      .map((e) => [e.data()['space_id'],e.data()['by']['email'], e.data()['by']['name'], e.data()['from'].toDate(),e.data()['to'].toDate(),e.data()['reason'],e.data()['space_id'],e.id ]) //el ultimo existe para borrarlo
       .toList();
   print("Lista de bookings");
   print(Solicitudes);
@@ -68,11 +68,7 @@ Future<List> getPendingBookings() async {
   print("Spaces");//ANTES DE ESTO HAY UN ERROR
   print(spaces.docs.length);
   print(spaces.docs.length.runtimeType);
-  // for (var i in spaces.docs){
-  //   print(i.id);
-  //   print(i.data());
-  // }
-  List Espacios = await spaces.docs.map((e) => [ e.id, e.data()['name'] ]).toList(); // El spaceid
+  List Espacios = await spaces.docs.map((e) => [ e.id, e.data()['name'] ,e.data()['location']]).toList(); // El spaceid
   print("Lista espacio");
   print(Espacios);
   //Ahora usamos los ids de ambos lados para conectarlos y tener la reserva con nombre del lab
@@ -81,6 +77,7 @@ Future<List> getPendingBookings() async {
       if( Solicitudes[i][0]  == Espacios[j][0] ){ //la pose 0 tiene los ids de espacios y 0 id de espacios
         print("encontre un espacio");
         Solicitudes[i][0] = Espacios[j][1]; //Si coinciden reemplazo el nombre por id
+        Solicitudes[i][6] = Espacios[j][2];
       }
     }
   }
@@ -218,6 +215,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                               ),
                                             ],
                                           ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Razón de la reserva: ',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                    padding:const EdgeInsets.all(20),
+                                                    child:  Text(
+                                                      reservas[index][5], //list[index][by][email]
+                                                      style: TextStyle(fontSize: 16),
+                                                      ),
+                                                )
+                                              ),
+                                            ],
+                                          ),
                                           const SizedBox(height: 20),
                                           Row(
                                             mainAxisAlignment:
@@ -280,10 +297,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Card(
                       child: ListTile(
                         leading: FlutterLogo(size: 72.0),
-                        title: Text('Three-line ListTile'),
-                        subtitle: Text(
-                            'A sufficiently long subtitle warrants three lines.'),
-                        trailing: Icon(Icons.more_vert),
+                        title: Text(reservas[index][0]),
+                        subtitle: Text(reservas[index][3].month.toString()+ "/" +reservas[index][3].day.toString()+ " "+reservas[index][3].hour.toString()+":"+reservas[index][3].minute.toString()+ "-" + reservas[index][4].hour.toString()+":"+reservas[index][4].minute.toString()), //list[index][from] y list[index][to]
+                        trailing: Icon(Icons.more_vert),//Aqui poner la foto del espacio correspondiente
                         isThreeLine: true,
                       ),
                     ),
