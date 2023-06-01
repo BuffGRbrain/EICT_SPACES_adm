@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -21,4 +22,13 @@ class mainController extends GetxController{
     print(result.isValue);
   });
   }
+
+    Future<String> getEmailKey() async {
+    var db = FirebaseFirestore.instance;
+    var emailKey = await db
+        .collection('utilites')
+        .where('name', isEqualTo: 'emailkey')
+        .get();
+    return emailKey.docs[0]['value'];
+    }
 }
