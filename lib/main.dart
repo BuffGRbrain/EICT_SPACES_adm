@@ -246,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   updateEvent(reservas[index][7], "APPROVED");
                                                   deleteCollision(reservas[index][3],reservas[index][4],reservas,reservas[index][7]);
                                                   Navigator.pop(context);//Debe cerrar el dialog
+                                                  setState(() {});
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: Colors.green,
@@ -269,6 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   controller.sendMail();
                                                   updateEvent(reservas[index][7], "DENIED");
                                                   Navigator.pop(context);//Debe cerrar el dialog
+                                                  setState(() {});
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: Colors.red,
@@ -344,8 +346,8 @@ Future<void> updateEvent(id, data) {
 //reservas son las pending y uso el id para actualizarlas
 Future<void> deleteCollision(from,to,reservas,id) async {//from, to son date e id es el de la actual para no borrarla accidentalmente
   for(var i in reservas){
-    print("Entramos en el if de colisiones");
     if(i[7] != id ){ //si no es la que acabo de aceptar buscar colisiones y matarlas
+      print("Entramos en el if de colisiones");
       var aux = to.isBefore( i[3]  ); //es un booleano
       var aux2 = from.isAfter(i[3]);
       var aux3 = to.isBefore( i[4]  ); //es un booleano
