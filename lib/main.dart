@@ -60,7 +60,7 @@ Future<List> getPendingBookings() async {
   print(bookings.docs.length);
   print(bookings.docs.length.runtimeType);
   List Solicitudes = await bookings.docs
-      .map((e) => [e.data()['space_id'],e.data()['by']['email'], e.data()['by']['name'], e.data()['from'].toDate(),e.data()['to'].toDate(),e.data()['reason'],e.data()['space_id'] ]) //el ultimo existe para borrarlo
+      .map((e) => [e.data()['space_id'],e.data()['by']['email'], e.data()['by']['name'], e.data()['from'].toDate(),e.data()['to'].toDate(),e.data()['reason'],e.data()['space_id'],e.id ]) //el ultimo existe para borrarlo
       .toList();
   print("Lista de bookings");
   print(Solicitudes);
@@ -68,10 +68,6 @@ Future<List> getPendingBookings() async {
   print("Spaces");//ANTES DE ESTO HAY UN ERROR
   print(spaces.docs.length);
   print(spaces.docs.length.runtimeType);
-  // for (var i in spaces.docs){
-  //   print(i.id);
-  //   print(i.data());
-  // }
   List Espacios = await spaces.docs.map((e) => [ e.id, e.data()['name'] ,e.data()['location']]).toList(); // El spaceid
   print("Lista espacio");
   print(Espacios);
