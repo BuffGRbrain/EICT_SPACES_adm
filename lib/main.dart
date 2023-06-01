@@ -359,7 +359,16 @@ Future<void> deleteCollision(from,to,reservas,id) async {//from, to son date e i
       var aux4 = to.isAfter(i[4]);
 
       print("prueba a la misma hora con boleanos");
+
+      print( to );
+      print( i[4] );
+
       print( to.isAtSameMomentAs(i[4]));
+
+      print("prueba a la misma hora con boleanos");
+      print( from );
+      print( i[3]);
+
       print( from.isAtSameMomentAs(i[3]));
 
 
