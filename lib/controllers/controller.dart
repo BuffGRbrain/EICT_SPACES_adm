@@ -15,7 +15,7 @@ class mainController extends GetxController{
     mailerKey = emailKey.docs[0]['value'];
     return emailKey.docs[0]['value'];
   }
-  //Future<String> mailerkey = getEmailKey();
+  Future<String> mailerkey = getEmailKey();
 
   void sendMail() async {
   final mailer = Mailer(mailerKey);
