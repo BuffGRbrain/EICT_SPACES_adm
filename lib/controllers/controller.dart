@@ -4,9 +4,19 @@ import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class mainController extends GetxController{
-  
+  String mailerKey = "";
+  Future<String> getEmailKey() async {
+    var db = FirebaseFirestore.instance;
+    var emailKey = await db
+        .collection('utilites')
+        .where('name', isEqualTo: 'emailkey')
+        .get();
+    mailerKey = emailKey.docs[0]['value'];
+    return emailKey.docs[0]['value'];
+  }
+
   void sendMail() async {
-  final mailer = Mailer('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');
+  final mailer = Mailer(mailerKey);
   final toAddress = Address('juanluis0217@gmail.com');
   const fromAddress = Address('juanl.avila@urosario.edu.co');
 
@@ -21,14 +31,5 @@ class mainController extends GetxController{
   mailer.send(email).then((result) {
     print(result.isValue);
   });
-  }
-
-    Future<String> getEmailKey() async {
-    var db = FirebaseFirestore.instance;
-    var emailKey = await db
-        .collection('utilites')
-        .where('name', isEqualTo: 'emailkey')
-        .get();
-    return emailKey.docs[0]['value'];
-    }
+  }    
 }
