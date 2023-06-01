@@ -50,39 +50,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 
-Future<List<Meeting>> getPendingBookings() async {
-  print("a");
+Future<List> getPendingBookings() async {
   var db = FirebaseFirestore.instance;
   var bookings = await db
       .collection('bookings')
       .where('status', isEqualTo: 'PENDING')
       .get();
+  print("bookings");
   print(bookings.docs.length);
-  List<Meeting> Solicitudes = bookings.docs
-      .map((e) => Meeting(
-    e.data()['name'],
-    e.data()['from'].toDate(),
-    e.data()['to'].toDate(),
-    Colors.blue,
-    false,
-    e.data()['status'],
-    e.data()['reason'],
-    e.data()['by'],
-    e.data()['space_id'],
-    e.id,
-  ))
+  print(bookings.docs.length.runtimeType);
+  List Solicitudes = await bookings.docs
+      .map((e) => [e.data()['space_id'],e.data()['by']['email'], e.data()['by']['name'], e.data()['from'].toDate(),e.data()['to'].toDate()])
       .toList();
-  print("numSolicitudes: ");
-
+  print("Lista de bookings");
   print(Solicitudes);
-  print(Solicitudes.runtimeType);
+  var spaces = await db.collection('spaces').get();//hacer esto luego de tener claros los ides de bookings pendientes
+  print("Spaces");//ANTES DE ESTO HAY UN ERROR
+  print(spaces.docs.length);
+  print(spaces.docs.length.runtimeType);
+  // for (var i in spaces.docs){
+  //   print(i.id);
+  //   print(i.data());
+  // }
+  List Espacios = await spaces.docs.map((e) => [ e.id, e.data()['name'] ]).toList(); // El spaceid
+  print("Lista espacio");
+  print(Espacios);
+  //Ahora usamos los ids de ambos lados para conectarlos y tener la reserva con nombre del lab
+  for (int i = 0; i< Solicitudes.length; i++ ){
+    for(int j = 0; j< Espacios.length;j++){
+      if( Solicitudes[i][0]  == Espacios[j][0] ){ //la pose 0 tiene los ids de espacios y 0 id de espacios
+        print("encontre un espacio");
+        Solicitudes[i][0] = Espacios[j][1]; //Si coinciden reemplazo el nombre por id
+      }
+    }
+  }
+  //Ahora solicitudes tiene nombreEspacio,correo,nombre,desde,hasta
+  print("Solicitudes");
+  print(Solicitudes);
+  print(Solicitudes.length);
+  print(Solicitudes.length.runtimeType);
   return Solicitudes;
 }
 
 
 class _MyHomePageState extends State<MyHomePage> {
   final mainController controller = Get.put(mainController());
-  var numSolicitudes = 10;
   FirebaseFirestore db = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
@@ -98,14 +110,12 @@ class _MyHomePageState extends State<MyHomePage> {
         child: FutureBuilder(
           future: getPendingBookings(),
           builder: (context, snapshot) {
-            var index = 3;
-            print(snapshot.data![3]  );//meterle index -1 del list generate
             List? reservas = snapshot.data; //ya esta en lista de la función
             return ListView(
               //ademas aceptar o quitar las quita de la lista, puede ser refrescar y volver a cargar todo desde la base de datos
                 children:
                 List.generate(
-                  10, //aqui se debe poner el numero de solicitudes que hay en la base de datos
+                  reservas!.length, //datos del snapshot
                       (index) => GestureDetector(
                     onTap: () {
                       showDialog(
@@ -166,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 ),
                                               ),
                                               Text(
-                                                reservas![index].by['name'], //list[index][by][name]
+                                                reservas[index][2], //list[index][by][name]
                                                 style: TextStyle(fontSize: 16),
                                               ),
                                             ],
@@ -183,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               ),
                                               Text(
                                                 //reservas[index]['space_id'], //list[index][space_id]
-                                                "HIPATIA",
+                                                reservas[index][0],
                                                 style: TextStyle(fontSize: 16),
                                               ),
                                             ],
@@ -200,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  'Lunes 22 de mayo 3:00 p.m. - 5:00 p.m.',
+                                                  reservas[index][3].toString() + " - " + reservas[index][4].toString(), //list[index][from] y list[index][to]
                                                   style:
                                                   TextStyle(fontSize: 16),
                                                   overflow: TextOverflow.clip,
