@@ -344,7 +344,9 @@ Future<void> updateEvent(id, data) {
 }
 
 //reservas son las pending y uso el id para actualizarlas
-Future<void> deleteCollision(from,to,reservas,id) async {//from, to son date e id es el de la actual para no borrarla accidentalmente
+Future<void> deleteCollision(from1,to1,reservas,id) async {//from, to son date e id es el de la actual para no borrarla accidentalmente
+  DateTime to = DateTime(to1.year,to1.month,to1.day,to1.hour);
+  DateTime from = DateTime(from1.year,from1.month,from1.day,from1.hour);
   for(var i in reservas){
     if(i[7] != id ){ //si no es la que acabo de aceptar buscar colisiones y matarlas
       print("Entramos en el if de colisiones");
