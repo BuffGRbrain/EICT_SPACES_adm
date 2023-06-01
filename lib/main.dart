@@ -57,21 +57,21 @@ Future<List> getPendingBookings() async {
       .collection('bookings')
       .where('status', isEqualTo: 'PENDING')
       .get();
-  print("bookings");
-  print(bookings.docs.length);
-  print(bookings.docs.length.runtimeType);
+  // print("bookings");
+  // print(bookings.docs.length);
+  // print(bookings.docs.length.runtimeType);
   List Solicitudes = await bookings.docs
       .map((e) => [e.data()['space_id'],e.data()['by']['email'], e.data()['by']['name'], e.data()['from'].toDate(),e.data()['to'].toDate(),e.data()['reason'],e.data()['space_id'],e.id ]) //el ultimo existe para borrarlo
       .toList();
-  print("Lista de bookings");
-  print(Solicitudes);
+  // print("Lista de bookings");
+  // print(Solicitudes);
   var spaces = await db.collection('spaces').get();//hacer esto luego de tener claros los ides de bookings pendientes
-  print("Spaces");//ANTES DE ESTO HAY UN ERROR
-  print(spaces.docs.length);
-  print(spaces.docs.length.runtimeType);
+  // print("Spaces");//ANTES DE ESTO HAY UN ERROR
+  // print(spaces.docs.length);
+  // print(spaces.docs.length.runtimeType);
   List Espacios = await spaces.docs.map((e) => [ e.id, e.data()['name'] ,e.data()['location']]).toList(); // El spaceid
-  print("Lista espacio");
-  print(Espacios);
+  // print("Lista espacio");
+  // print(Espacios);
   //Ahora usamos los ids de ambos lados para conectarlos y tener la reserva con nombre del lab
   for (int i = 0; i< Solicitudes.length; i++ ){
     for(int j = 0; j< Espacios.length;j++){
@@ -93,9 +93,10 @@ Future<List> getPendingBookings() async {
 
 class _MyHomePageState extends State<MyHomePage> {
   final mainController controller = Get.put(mainController());
-  FirebaseFirestore db = FirebaseFirestore.instance;
+  FirebaseFirestore db = FirebaseFirestore.instance;  
   @override
   Widget build(BuildContext context) {
+    controller.getEmailKey();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -154,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    Text(
+                                    const Text(
                                       'Detalles de la reserva',
                                       style: TextStyle(
                                           fontSize: 22,
@@ -164,78 +165,56 @@ class _MyHomePageState extends State<MyHomePage> {
                                       padding: const EdgeInsets.all(15.0),
                                       child: Column(
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Nombre: ',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Text(
-                                                reservas[index][2], //list[index][by][name]
-                                                style: TextStyle(fontSize: 16),
-                                              ),
-                                            ],
+                                          const Text(
+                                            'Nombre: ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            reservas[index][2], //list[index][by][name]
+                                            style: const TextStyle(fontSize: 16),
                                           ),
                                           const SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Espacio: ',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Text(
-                                                //reservas[index]['space_id'], //list[index][space_id]
-                                                reservas[index][0],
-                                                style: TextStyle(fontSize: 16),
-                                              ),
-                                            ],
+                                          const Text(
+                                            'Espacio: ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            //reservas[index]['space_id'], //list[index][space_id]
+                                            reservas[index][0],
+                                            style: TextStyle(fontSize: 16),
                                           ),
                                           const SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Fecha reserva: ',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  reservas[index][3].toString() + " - " + reservas[index][4].toString(), //list[index][from] y list[index][to]
-                                                  style:
-                                                  TextStyle(fontSize: 16),
-                                                  overflow: TextOverflow.clip,
-                                                ),
-                                              ),
-                                            ],
+                                          const Text(
+                                            'Fecha reserva: ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Razón de la reserva: ',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Expanded(
-                                                  child: Container(
-                                                    padding:const EdgeInsets.all(20),
-                                                    child:  Text(
-                                                      reservas[index][5], //list[index][by][email]
-                                                      style: TextStyle(fontSize: 16),
-                                                      ),
-                                                )
-                                              ),
-                                            ],
+                                          Text(
+                                            // reservas[index][3].toString() + " - " + reservas[index][4].toString(), //list[index][from] y list[index][to]
+                                            controller.formatDateRange(reservas[index][3],reservas[index][4]),
+                                            style: const TextStyle(fontSize: 16),
+                                            // overflow: TextOverflow.clip,
                                           ),
+                                          const SizedBox(height: 8),
+                                          const Text(
+                                            'Razón de la reserva: ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            reservas[index][5], //list[index][by][email]
+                                            style: const TextStyle(fontSize: 16),
+                                            ),
                                           const SizedBox(height: 20),
                                           Row(
                                             mainAxisAlignment:
@@ -243,6 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             children: [
                                               ElevatedButton(
                                                 onPressed: () {
+                                                  controller.sendConfirmationMail(reservas[index][2],reservas[index][0],reservas[index][3].toString(),reservas[index][6],reservas[index][1]);
                                                   updateEvent(reservas[index][7], "APPROVED");
                                                   deleteCollision(reservas[index][3],reservas[index][4],reservas,reservas[index][7],reservas[index][0]);
                                                   Navigator.pop(context);//Debe cerrar el dialog
@@ -252,8 +232,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   backgroundColor: Colors.green,
                                                   foregroundColor: Colors.white,
                                                   textStyle:
-                                                  TextStyle(fontSize: 16),
-                                                  padding: EdgeInsets.symmetric(
+                                                  const TextStyle(fontSize: 16),
+                                                  padding: const EdgeInsets.symmetric(
                                                       horizontal: 20,
                                                       vertical: 12),
                                                   shape: RoundedRectangleBorder(
@@ -262,12 +242,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         8),
                                                   ),
                                                 ),
-                                                child: Text('Aceptar'),
+                                                child: const Text('Aceptar'),
                                               ),
-                                              SizedBox(width: 15),
+                                              const SizedBox(width: 15),
                                               ElevatedButton(
-                                                onPressed: () {
-                                                  controller.sendMail();
+                                                onPressed: () {           
+                                                  controller.sendRejectionMail(reservas[index][2],reservas[index][0],reservas[index][3].toString(),reservas[index][6],reservas[index][1]);                                       
                                                   updateEvent(reservas[index][7], "DENIED");
                                                   Navigator.pop(context);//Debe cerrar el dialog
                                                   setState(() {});
@@ -276,8 +256,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   backgroundColor: Colors.red,
                                                   foregroundColor: Colors.white,
                                                   textStyle:
-                                                  TextStyle(fontSize: 16),
-                                                  padding: EdgeInsets.symmetric(
+                                                  const TextStyle(fontSize: 16),
+                                                  padding: const EdgeInsets.symmetric(
                                                       horizontal: 20,
                                                       vertical: 12),
                                                   shape: RoundedRectangleBorder(
@@ -286,7 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         8),
                                                   ),
                                                 ),
-                                                child: Text('Rechazar'),
+                                                child: const Text('Rechazar'),
                                               ),
                                             ],
                                           ),
