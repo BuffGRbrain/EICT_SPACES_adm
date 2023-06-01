@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Lista de solicitudes de espacios'),
     );
   }
 }
@@ -245,6 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 onPressed: () {
                                                   updateEvent(reservas[index][7], "APPROVED");
                                                   deleteCollision(reservas[index][3],reservas[index][4],reservas,reservas[index][7]);
+                                                  Navigator.pop(context);//Debe cerrar el dialog
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: Colors.green,
@@ -267,6 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 onPressed: () {
                                                   controller.sendMail();
                                                   updateEvent(reservas[index][7], "DENIED");
+                                                  Navigator.pop(context);//Debe cerrar el dialog
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: Colors.red,
@@ -334,7 +336,7 @@ Future<void> updateEvent(id, data) {
     //Espacio para negar las que tienen conflicto
     return users
         .doc(id)
-        .update({'Status':data}) //{key1: val1}
+        .update({'status':data}) //{key1: val1}
         .then((value) => print("Event Updated"))
         .catchError((error) => print("Failed to update event: $error"));
 }
@@ -342,10 +344,14 @@ Future<void> updateEvent(id, data) {
 //reservas son las pending y uso el id para actualizarlas
 Future<void> deleteCollision(from,to,reservas,id) async {//from, to son date e id es el de la actual para no borrarla accidentalmente
   for(var i in reservas){
+    print("Entramos en el if de colisiones");
     if(i[7] != id ){ //si no es la que acabo de aceptar buscar colisiones y matarlas
       var aux = to.isBefore( i[3]  ); //es un booleano
       var aux2 = from.isAfter(i[3]);
-      if(aux && aux2){ //si esta en el rango de reserva la matamos
+      var aux3 = to.isBefore( i[4]  ); //es un booleano
+      var aux4 = from.isAfter(i[4]);
+      if( (aux && aux2) || (aux3 && aux4) ){ //si esta en el rango de reserva la matamos sea la de inicio o la de fin
+        print("Se encontro una colision");
         updateEvent(i[7], "DENIED");
       }
     }
