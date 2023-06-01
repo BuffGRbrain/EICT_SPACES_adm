@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Adimisnutador - Reserva de Espacios EICT',
       theme: ThemeData(
         useMaterial3: true,
         primarySwatch: Colors.blue,
@@ -83,10 +83,10 @@ Future<List> getPendingBookings() async {
     }
   }
   //Ahora solicitudes tiene nombreEspacio,correo,nombre,desde,hasta
-  print("Solicitudes");
-  print(Solicitudes);
-  print(Solicitudes.length);
-  print(Solicitudes.length.runtimeType);
+  // print("Solicitudes");
+  // print(Solicitudes);
+  // print(Solicitudes.length);
+  // print(Solicitudes.length.runtimeType);
   return Solicitudes;
 }
 
@@ -283,10 +283,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: Card(
                       child: ListTile(
-                        leading: FlutterLogo(size: 72.0),
-                        title: Text(reservas[index][0]),
-                        subtitle: Text(reservas[index][3].month.toString()+ "/" +reservas[index][3].day.toString()+ " "+reservas[index][3].hour.toString()+":"+reservas[index][3].minute.toString()+ "-" + reservas[index][4].hour.toString()+":"+reservas[index][4].minute.toString()), //list[index][from] y list[index][to]
-                        trailing: Icon(Icons.more_vert),//Aqui poner la foto del espacio correspondiente
+                        // leading: const FlutterLogo(size: 72.0),
+                        title: Text(reservas[index][0],
+                          style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w500,
+                                ),),
+                        subtitle: Text(controller.formatDateRange(reservas[index][3],reservas[index][4]),), //list[index][from] y list[index][to]
+                        trailing: const Icon(Icons.more_vert),//Aqui poner la foto del espacio correspondiente
                         isThreeLine: true,
                       ),
                     ),

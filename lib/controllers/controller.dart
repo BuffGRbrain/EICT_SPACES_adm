@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
-
+import 'package:intl/date_symbol_data_local.dart';
 
 class mainController extends GetxController{
   String _mailerKey = "";
@@ -94,13 +94,17 @@ class mainController extends GetxController{
     });
   }
 
-  String formatDateRange(DateTime start, DateTime end) {
-    DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+  String formatDateRange(DateTime start, DateTime end) {    
+    initializeDateFormatting();
+    DateFormat dateFormat = DateFormat('EEEE d', 'es');
+    DateFormat monthFormat = DateFormat('MMMM', 'es');
     DateFormat timeFormat = DateFormat('HH:mm');
     String startDate = dateFormat.format(start);
+    startDate = startDate.replaceFirst(startDate[0], startDate[0].toUpperCase());
+    String month = monthFormat.format(start);
     String startTime = timeFormat.format(start);
     String endTime = timeFormat.format(end);
 
-  return '$startDate $startTime - $endTime';
+  return '$startDate de $month $startTime - $endTime';
 }    
 }  
