@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 10));
+          await Future.delayed(const Duration(seconds: 1));
           setState(() {});
         },
         child: FutureBuilder(
