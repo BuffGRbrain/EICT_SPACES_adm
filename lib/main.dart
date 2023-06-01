@@ -348,10 +348,16 @@ Future<void> deleteCollision(from,to,reservas,id) async {//from, to son date e i
   for(var i in reservas){
     if(i[7] != id ){ //si no es la que acabo de aceptar buscar colisiones y matarlas
       print("Entramos en el if de colisiones");
-      var aux = to.isBefore( i[3]  ); //es un booleano
-      var aux2 = from.isAfter(i[3]);
-      var aux3 = to.isBefore( i[4]  ); //es un booleano
-      var aux4 = from.isAfter(i[4]);
+      // var aux = to.isBefore( i[3]  ); //es un booleano
+      // var aux2 = from.isAfter(i[3]);
+      // var aux3 = to.isBefore( i[4]  ); //es un booleano
+      // var aux4 = from.isAfter(i[4]);
+
+      var aux = from.isBefore( i[3]  ); //es un booleano
+      var aux2 = to.isAfter(i[3]);
+      var aux3 = from.isBefore( i[4]  ); //es un booleano
+      var aux4 = to.isAfter(i[4]);
+
       if( (aux && aux2) || (aux3 && aux4) ){ //si esta en el rango de reserva la matamos sea la de inicio o la de fin
         print("Se encontro una colision");
         updateEvent(i[7], "DENIED");
