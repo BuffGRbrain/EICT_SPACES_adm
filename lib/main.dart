@@ -362,6 +362,10 @@ Future<void> deleteCollision(from,to,reservas,id) async {//from, to son date e i
         print("Se encontro una colision");
         updateEvent(i[7], "DENIED");
       }
+      else if( ( to == i[4]  ) || (from == i[3]) ){ //caso para cuadno el inicio o el final son iguales
+        print("Se encontro una colision");
+        updateEvent(i[7], "DENIED");
+      }
     }
   }
 }
