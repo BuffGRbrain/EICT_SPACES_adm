@@ -244,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               ElevatedButton(
                                                 onPressed: () {
                                                   updateEvent(reservas[index][7], "APPROVED");
-                                                  deleteCollision(reservas[index][3],reservas[index][4],reservas,reservas[index][7]);
+                                                  deleteCollision(reservas[index][3],reservas[index][4],reservas,reservas[index][7],reservas[index][0]);
                                                   Navigator.pop(context);//Debe cerrar el dialog
                                                   setState(() {});
                                                 },
@@ -344,11 +344,11 @@ Future<void> updateEvent(id, data) {
 }
 
 //reservas son las pending y uso el id para actualizarlas
-Future<void> deleteCollision(from1,to1,reservas,id) async {//from, to son date e id es el de la actual para no borrarla accidentalmente
+Future<void> deleteCollision(from1,to1,reservas,id,name) async {//from, to son date e id es el de la actual para no borrarla accidentalmente
   DateTime to = DateTime(to1.year,to1.month,to1.day,to1.hour);
   DateTime from = DateTime(from1.year,from1.month,from1.day,from1.hour);
   for(var i in reservas){
-    if(i[7] != id ){ //si no es la que acabo de aceptar buscar colisiones y matarlas
+    if( (i[7] != id) && ( i[0]==name ) ){ //si no es la que acabo de aceptar buscar colisiones y matarlas
       print("Entramos en el if de colisiones");
       // var aux = to.isBefore( i[3]  ); //es un booleano
       // var aux2 = from.isAfter(i[3]);

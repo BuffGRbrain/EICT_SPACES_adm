@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 class mainController extends GetxController{
   String mailerKey = "";
+
   Future<String> getEmailKey() async {
     var db = FirebaseFirestore.instance;
     var emailKey = await db
@@ -14,6 +15,7 @@ class mainController extends GetxController{
     mailerKey = emailKey.docs[0]['value'];
     return emailKey.docs[0]['value'];
   }
+  //Future<String> mailerkey = getEmailKey();
 
   void sendMail() async {
   final mailer = Mailer(mailerKey);
