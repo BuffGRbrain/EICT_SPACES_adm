@@ -9,11 +9,25 @@ import 'package:intl/date_symbol_data_local.dart';
 class mainController extends GetxController{
   String _mailerKey = "";
 
+  Map filter = {
+    'active': false,
+    'list': {
+      'categories':'',
+      'services':'',
+    },
+    'numeric':{
+      'student_capacity': -1,
+      'equipment_amount': -1
+    }
+  };
+
   @override
   void onInit() {
     super.onInit();
     getEmailKey();
   }
+
+  Map getFilter() => filter;
 
   void setMailerKey(String newValue){
     _mailerKey = newValue;

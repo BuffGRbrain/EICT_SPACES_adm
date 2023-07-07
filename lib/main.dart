@@ -1,10 +1,12 @@
 import 'package:eict_spaces_adm/controllers/controller.dart';
-import 'package:eict_spaces_adm/pages/CurrentAppointments.dart';
+//import 'package:eict_spaces_adm/pages/CurrentAppointments.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
+import 'package:eict_spaces_adm/pages/spaces.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();  
@@ -305,7 +307,8 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CurrentApointments()),
+            //MaterialPageRoute(builder: (context) => CurrentApointments()),
+            MaterialPageRoute(builder: (context) => Spaces()),
           );
         },
         tooltip: 'Increment', //buscar un icono como un calendario
